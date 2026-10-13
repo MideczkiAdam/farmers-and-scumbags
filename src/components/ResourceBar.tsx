@@ -1,3 +1,4 @@
+import { removeCurrentMap } from "../store/mapQueryOptions"
 import { useResourceStore } from "../store/useResourceStore"
 
 const ResourceBar = () => {
@@ -14,6 +15,8 @@ const ResourceBar = () => {
       <div>{stone}🪨</div>
       <div>{food}🥖</div>
       <div>{people}🫃</div>
+
+      <button onClick={removeCurrentMap}>🔄️🗺️</button>
     </div>
   )
 }

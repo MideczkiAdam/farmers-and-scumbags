@@ -21,3 +21,19 @@
 .selectorButton{
   font-size: 2rem;
 }
+
+.tile{
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.tileBuilding, .tileResource{
+  user-select: none;
+  border: none !important;
+}
+
+.tileResource{
+  transform: scale(1);
+  scale: 2rem;
+}

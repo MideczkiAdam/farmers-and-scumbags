@@ -1,6 +1,8 @@
 import { useState } from "react"
-import type { BuildingType, TileType } from "../types/Map"
+import type { BuildingType, ResourceType, TileType } from "../types/Map"
 import { useMapStore } from "../store/useMapStore"
+import { useResourceStore } from "../store/useResourceStore"
+import { getBuildingData } from "../types/Buildings"
 
 type TilePropsType = {
   tile: TileType,
@@ -11,6 +13,7 @@ type TilePropsType = {
 const Tile = ({tile,colIdx,rowIdx}:TilePropsType) => {
 
   const selectedBuilding = useMapStore((state) => state.selectedBuilding)
+  const buildABuilding = useResourceStore((state) => state.buildABuilding)
 
   const buildingIcon = (building: BuildingType) => {
     let icon = "";
@@ -23,6 +26,22 @@ const Tile = ({tile,colIdx,rowIdx}:TilePropsType) => {
         icon = "🪓"; break;
       case "mine":
         icon = "⛏️"; break;
+      default: break;
+    }
+    return icon;
+  }
+
+  const resourceIcon = (resource: ResourceType) => {
+    let icon = "";
+    switch (resource) {
+      case "wood":
+        icon = "🌳"; break;
+      case "stone":
+        icon = "🪨"; break;
+      case "food":
+        icon = "🌽"; break;
+      case "people":
+        icon = "🫃"; break;
       default: break;
     }
     return icon;
@@ -43,7 +62,14 @@ const Tile = ({tile,colIdx,rowIdx}:TilePropsType) => {
   }
 
   const build = () => {
-    canBuild() ? setBuilding(selectedBuilding) : alert("Nem lehet építeni!")
+    if(!canBuild() || selectedBuilding == null){ alert("Nem lehet építkezni!"); return; }
+
+    const result = buildABuilding(getBuildingData(selectedBuilding))
+
+    if (result){ setBuilding(selectedBuilding) }
+    else{
+      alert("Nincs elég nyersanyag!")
+    }
   }
 
   const hoverTile = (e: React.MouseEvent) => {
@@ -58,8 +84,9 @@ const Tile = ({tile,colIdx,rowIdx}:TilePropsType) => {
   }
 
   return (
-    <div onMouseOver={(e)=>hoverTile(e)} onMouseLeave={(e)=>leaveTile(e)} onClick={build} className={tile.ground} title={`${rowIdx}|${colIdx}`}>
-      {building && buildingIcon(building)}
+    <div onMouseOver={(e)=>hoverTile(e)} onMouseLeave={(e)=>leaveTile(e)} onClick={build} className={"tile " + tile.ground} title={`${rowIdx}|${colIdx}`}>
+      <span className="tileBuilding">{building && buildingIcon(building)}</span>
+      <span className="tileResource">{tile.resource && resourceIcon(tile.resource)}</span>
     </div>
   )
 }
