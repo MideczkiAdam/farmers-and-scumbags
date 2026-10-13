@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { registerUser } from "../services/auth"
 import styles from "./RegistrationPage.module.css"
 
 const RegistrationPage = () => {
+    const navigate = useNavigate()
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -30,10 +31,11 @@ const RegistrationPage = () => {
         if(error.length === 0){
             registerUser(username, password1, email)
                 .then(response => {
-                    console.log(response)
+                    navigate("/login");
+                    console.log(response);
                 })
                 .catch(error => {
-                    console.error(error)
+                    console.error(error);
                 })
         }
     }

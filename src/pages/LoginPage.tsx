@@ -1,9 +1,13 @@
 import { useState } from "react"
 import { loginUser } from "../services/auth"
 import styles from "./LoginPage.module.css"
+import { useNavigate} from "react-router-dom"
 
 const LoginPage = () => {
+    const navigate = useNavigate()
+
     const [error, setError] = useState<string[]>([])
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -19,10 +23,11 @@ const LoginPage = () => {
         if(error.length === 0){
             loginUser(username, password)
                 .then(response => {
-                    console.log(response)
+                    navigate("/");
+                    console.log(response);
                 })
                 .catch(error => {
-                    console.error(error)
+                    console.error(error);
                 })
         }
     }
